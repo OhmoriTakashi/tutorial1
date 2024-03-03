@@ -11,7 +11,7 @@ const App: React.FC = () => {
         fetchUrl={requests.feachNetflixOriginals}
         isLargeRow
       />
-      <Row title="Top Rated" fetchUrl={requests.feactTopRated} />
+      <Row title="Top Rated_test" fetchUrl={requests.feactTopRated} />
       <Row title="Action Movies" fetchUrl={requests.feactActionMovies} />
       <Row title="Comedy Movies" fetchUrl={requests.feactComedyMovies} />
       <Row title="Horror Movies" fetchUrl={requests.feactHorrorMovies} />
