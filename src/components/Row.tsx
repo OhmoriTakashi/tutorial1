@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import Skeleton from "@mui/material/Skeleton";
 import { client, isAxiosError } from "../axios";
 import "./Row.scss";
+import { Stack } from "@mui/material";
 
 const base_url = "https://image.tmdb.org/t/p/original";
 
@@ -32,10 +34,12 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
         setMovies(request.data.results);
       } catch (err) {
         if (isAxiosError(err)) {
-          const message = `エラーが発生しました: ステータスコード ${err.response?.status}`;
+          const message = `データの取得に失敗しました、時間をおいて再度お試しください: Error Code ${err.response?.status}`;
           setError(message);
         } else {
-          setError("不明なエラーが発生しました");
+          setError(
+            "データの取得に失敗しました、時間をおいて再度お試しください"
+          );
         }
       } finally {
         setLoading(false);
@@ -47,27 +51,90 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
   return (
     <div>
       {loading ? (
-        "読込中"
+        <div className="Row">
+          <h2>{title}</h2>
+          <div className="Row-posters">
+            {isLargeRow ? (
+              <Stack
+                direction={"row"}
+                spacing={2}
+                sx={{
+                  padding: "20px",
+                }}
+              >
+                {Array(8)
+                  .fill(null)
+                  .map((_, index) => (
+                    <Skeleton
+                      key={index}
+                      sx={{ bgcolor: "grey.900" }}
+                      variant="rectangular"
+                      width={170}
+                      height={250}
+                    />
+                  ))}
+              </Stack>
+            ) : (
+              <Stack
+                direction={"row"}
+                spacing={2.5}
+                sx={{
+                  padding: "20px",
+                }}
+              >
+                {Array(8)
+                  .fill(null)
+                  .map((_, index) => (
+                    <Skeleton
+                      key={index}
+                      sx={{ bgcolor: "grey.900" }}
+                      variant="rectangular"
+                      width={178}
+                      height={100}
+                    />
+                  ))}
+              </Stack>
+            )}
+          </div>
+        </div>
       ) : error ? (
-        error
+        <div className="Row">
+          <h2>{title}</h2>
+          <div className="Row-posters">
+            <p>{error}</p>
+          </div>
+        </div>
       ) : movies.length > 0 ? (
         <div className="Row">
           <h2>{title}</h2>
           <div className="Row-posters">
-            {movies.map((movie) => (
-              <img
-                key={movie.id}
-                className={`Row-poster ${isLargeRow && "Row-poster-large"}`}
-                src={`${base_url}${
-                  isLargeRow ? movie.poster_path : movie.backdrop_path
-                }`}
-                alt={movie.name}
-              />
-            ))}
+            <Stack
+              direction={"row"}
+              spacing={2.5}
+              sx={{
+                padding: "20px",
+              }}
+            >
+              {movies.map((movie) => (
+                <img
+                  key={movie.id}
+                  className={`Row-poster ${isLargeRow && "Row-poster-large"}`}
+                  src={`${base_url}${
+                    isLargeRow ? movie.poster_path : movie.backdrop_path
+                  }`}
+                  alt={movie.name}
+                />
+              ))}
+            </Stack>
           </div>
         </div>
       ) : (
-        "データがありません"
+        <div className="Row">
+          <h2>{title}</h2>
+          <div className="Row-posters">
+            <p>データがありません</p>
+          </div>
+        </div>
       )}
     </div>
   );

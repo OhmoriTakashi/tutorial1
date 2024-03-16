@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { client, isAxiosError } from "../axios";
 import { requests } from "../requests";
+import Box from "@mui/material/Box";
 import "./Banner.scss";
 
 type Movie = {
@@ -52,7 +53,7 @@ export const Banner = () => {
   return (
     <div>
       {loading ? (
-        "読込中"
+        <Box sx={{ width: "100vw", maxWidth: "100%", height: "448px" }}></Box>
       ) : error ? (
         error
       ) : movies.length > 0 ? (
@@ -85,7 +86,7 @@ export const Banner = () => {
           </header>
         </div>
       ) : (
-        <div>データがありません。</div>
+        <Box sx={{ width: "100vw", maxWidth: "100%", height: "448px" }}></Box>
       )}
     </div>
   );
